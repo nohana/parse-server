@@ -63,6 +63,14 @@ function logStartupOptions(options) {
 function startServer(options, callback) {
   const app = express();
   const api = new ParseServer(options);
+  var pingForHealthCheck = function(req, res, next) {
+    if (req.originalUrl === '/') {
+      return res.status(200).send("pong\n");
+    }
+    next();
+  };
+
+  app.use(pingForHealthCheck);
   app.use(options.mountPath, api);
 
   var server = app.listen(options.port, callback);
