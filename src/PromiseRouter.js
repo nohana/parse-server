@@ -150,10 +150,12 @@ function makeExpressHandler(appId, promiseHandler) {
         }
 
         let stringifiedResponse = JSON.stringify(result, null, 2);
-        log.verbose(
-          `RESPONSE from [${req.method}] ${url}: ${stringifiedResponse}`,
-          {result: result}
-        );
+        if (result.status >= 400) {
+          log.verbose(
+            `RESPONSE from [${req.method}] ${url}: ${stringifiedResponse}`,
+            {result: result}
+          );
+        }
 
         var status = result.status || 200;
         res.status(status);
