@@ -50,3 +50,7 @@ lib/
 
 # Folder created by FileSystemAdapter
 /files
+
+# Credentials for Nohana
+keys/
+config.json
