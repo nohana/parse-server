@@ -28,17 +28,34 @@ const help = function(){
   console.log('');
 };
 
+import http from 'http';
+import https from 'https';
+function pathThroughPing(pingUrl) {
+  return function(req, res, next) {
+    if (req.originalUrl !== '/') {
+      next();
+    }
+
+    console.log(pingUrl);
+    const isHTTPS = pingUrl.startsWith('https:');
+    const pingreq = (isHTTPS ? https : http).get(pingUrl, function(pingres) {
+      if (pingres.statusCode === 200) {
+        res.status(200).send("pong\n");
+      } else {
+        res.status(500).send("parse-server not ready\n");
+      }
+    });
+    pingreq.on('error', function(_) {
+      res.status(500).send("parse-server not ready\n");
+    });
+  };
+}
+
 function startServer(options, callback) {
   const app = express();
   const api = new ParseServer(options);
-  var pingForHealthCheck = function(req, res, next) {
-    if (req.originalUrl === '/') {
-      return res.status(200).send("pong\n");
-    }
-    next();
-  };
 
-  app.use(pingForHealthCheck);
+  app.use(pathThroughPing('http://127.0.0.1:8888'));
   app.use(options.mountPath, api);
 
   var server = app.listen(options.port, callback);
