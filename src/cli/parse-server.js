@@ -34,6 +34,7 @@ function pathThroughPing(pingUrl) {
   return function(req, res, next) {
     if (req.originalUrl !== '/') {
       next();
+      return;
     }
 
     console.log(pingUrl);
