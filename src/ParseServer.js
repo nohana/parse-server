@@ -19,7 +19,7 @@ import requiredParameter        from './requiredParameter';
 import { AnalyticsRouter }      from './Routers/AnalyticsRouter';
 import { ClassesRouter }        from './Routers/ClassesRouter';
 import { FeaturesRouter }       from './Routers/FeaturesRouter';
-import { InMemoryCacheAdapter } from './Adapters/Cache/InMemoryCacheAdapter';
+import { NullCacheAdapter }     from './Adapters/Cache/NullCacheAdapter';
 import { AnalyticsController }  from './Controllers/AnalyticsController';
 import { CacheController }      from './Controllers/CacheController';
 import { AnalyticsAdapter }     from './Adapters/Analytics/AnalyticsAdapter';
@@ -176,7 +176,7 @@ class ParseServer {
     const emailControllerAdapter = loadAdapter(emailAdapter);
     const userController = new UserController(emailControllerAdapter, appId, { verifyUserEmails });
 
-    const cacheControllerAdapter = loadAdapter(cacheAdapter, InMemoryCacheAdapter, {appId: appId});
+    const cacheControllerAdapter = loadAdapter(cacheAdapter, NullCacheAdapter, {appId: appId});
     const cacheController = new CacheController(cacheControllerAdapter, appId);
 
     const analyticsControllerAdapter = loadAdapter(analyticsAdapter, AnalyticsAdapter);
